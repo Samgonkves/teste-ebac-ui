@@ -8,6 +8,7 @@ describe('Funcionalidade: Login', () => {
     });
 
     afterEach(() => {
+        cy.viewport(1280, 720)
         cy.screenshot()
     });
 
@@ -16,7 +17,7 @@ describe('Funcionalidade: Login', () => {
         cy.get('#password').type('tEST$OFT5')
         cy.get('.woocommerce-form > .button').click()
         cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, saramariags')
-    })
+    });
 
     it('Exibir uma mensagem de erro ao inserir usuário inválido', () => {
         cy.get('#username').type('saramaria@gmail.com')
@@ -32,7 +33,6 @@ describe('Funcionalidade: Login', () => {
         cy.get('.woocommerce-form > .button').click()
         cy.get('.woocommerce-error > li').should('contain', 'Perdeu a senha?')
         cy.get('.woocommerce-error > li').should('exist')
-        
     });
 
     it('Novo login com sucesso - Massa de dados', () => {
@@ -40,16 +40,19 @@ describe('Funcionalidade: Login', () => {
         cy.get('#password').type(perfil.senha)
         cy.get('.woocommerce-form > .button').click()
         cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, saramariags')
-})
+    });
 
-it.only('Novo login com sucesso - Fixture', () => {
-    cy.fixture('perfil').then( dados => {
-        cy.get('#username').type(dados.usuario, {log:false})
-        cy.get('#password').type(dados.senha, {log:false})
-        cy.get('.woocommerce-form > .button').click()
-        cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, saramariags')
-    })
-       
-});
+    it('Novo login com sucesso - Fixture', function () {
+        cy.fixture('perfil').then(dados => {
+            cy.get('#username').type(dados.usuario, { log: false });
+            cy.get('#password').type(dados.senha, { log: false });
+            cy.get('.woocommerce-form > .button').click();
+            cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, saramariags');
+        })
+    });
 
+    it('Login usando commands', () => {
+        cy.login('saramariags@gmail.com', 'tEST$OFT5')
+        cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, saramariags');
+    });
 })
